@@ -6,7 +6,12 @@
     <meta charset="utf-8">
     <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
     <!--  All snippets are MIT license http://bootdey.com/license -->
-    <title>Mesaj</title>
+    <title>{% if room.first_user == request.user %}
+            {{room.second_user.username}}
+              {% else %}
+                {{room.first_user.username}}
+
+            {% endif %} adlı kişi ile mesajlaşma</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static "css/style2.css"%}">
@@ -18,21 +23,20 @@
   <div class="row app-one">
     <div class="col-sm-4 side">
       <div class="side-one">
-        <div class="row heading ">
+        <div class="row heading">
           <div class="col-sm-3 col-xs-3 heading-avatar">
             <div class="heading-avatar-icon">
-              <a href="{% url 'users:profile' %}">
+                <a href="{% url 'users:profile' %}">
               <img src="{{request.user.avatar.url}}">
               </a>
             </div>
-
-          </div>
-          <div class="col-sm-3 ">
-            <a href="{% url 'home' %}"  >Anasayfa<a/>
           </div>
           <div class="col-sm-3 ">
             <a href="{% url 'users:profile' %}">{{request.user.username}}<a/>
           </div>
+          <div class="col-sm-3 ">
+             <a href="{% url 'home' %}">Anasayfa<a/>
+           </div>
           <div class="col-sm-2 col-xs-2 heading-compose  pull-right">
             <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
           </div>
@@ -57,7 +61,6 @@
             </div>
             <div class="col-sm-9 col-xs-9 sideBar-main">
               <div class="row">
-
                 <a href="{% url 'chats:start_chat' user %}">
                 <div class="col-sm-8 col-xs-8 sideBar-name">
                   <span class="name-meta">{{ user }}
@@ -72,8 +75,6 @@
             </div>
           </div>
           {% endfor %}
-
-
         </div>
       </div>
 
@@ -294,8 +295,99 @@
       </div>
     </div>
 
+    <div class="col-sm-8 conversation">
+      <div class="row heading">
+        <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+          <div class="heading-avatar-icon">
+            {% if room.first_user == request.user %}
+            <img src="{{room.second_user.avatar.url}}">
+              {% else %}
+                <img src="{{room.first_user.avatar.url}}">
+
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-sm-8 col-xs-7 heading-name">
+          <a href="{% url 'home' %}" class="heading-name-meta">
+            {% if room.first_user == request.user %}
+              {{ room.second_user }}
+                {% else %}
+                {{ room.first_user }}
+            {% endif %}
+          </a>
+          <span class="heading-online">Online</span>
+        </div>
+        <div class="col-sm-1 col-xs-1  heading-dot pull-right">
+          <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div class="row message" id="conversation">
+        {% for message in messages %}
+        {% if message.user == request.user %}
+            <div class="row message-body">
+            <div class="col-sm-12 message-main-sender">
+              <div class="sender">
+                <div class="message-text">
+                  {% if message.what_is_it == "text" %}
+                    {{ message.content }}
+                    {% else %}
+                      <img src="{{ message.content }}" width="300" height="300">
+                  {% endif %}
+                </div>
+                <span class="message-time pull-right">
+                  {{ message.get_short_date }}
+                </span>
+              </div>
+            </div>
+            </div>
+        {% else %}
+            <div class="row message-body">
+              <div class="col-sm-12 message-main-receiver">
+                <div class="receiver">
+                  <div class="message-text">
+                    {{ message.content }}
+                  </div>
+                  <span class="message-time pull-right">
+                    {{ message.get_short_date }}
+                  </span>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+<!--        <div class="row message-previous">
+          <div class="col-sm-12 previous">
+            <a onclick="previous(this)" id="ankitjain28" name="20">
+            Show Previous Message!
+            </a>
+          </div>
+        </div>-->
+
+
+      </div>
+
+      <div class="row reply">
+        <div class="col-sm-1 col-xs-1 reply-emojis">
+          <i class="fa fa-smile-o fa-2x"></i>
+        </div>
+        <div class="col-sm-9 col-xs-9 reply-main">
+          <input class="form-control" rows="1" id="comment"></input>
+        </div>
+        <div class="col-sm-1 col-xs-1 reply-recording">
+          <input type="file" class="hidden" id="hiddeninput">
+          <i class="fa fa-file fa-2x" id="file" onclick="document.getElementById('hiddeninput').click()" aria-hidden="true"></i>
+        </div>
+        <div class="col-sm-1 col-xs-1 reply-send" id="send">
+          <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+    {{ room_name|json_script:"room-name" }}
+    {{ request.user.username|json_script:"user" }}
 
 
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
