@@ -1,7 +1,7 @@
 
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8">
     <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
@@ -331,8 +331,16 @@
                 <div class="message-text">
                   {% if message.what_is_it == "text" %}
                     {{ message.content }}
-                    {% else %}
+                    {% elif message.what_is_it == "image" %}
                       <img src="{{ message.content }}" width="300" height="300">
+                    {% elif message.what_is_it == "audio" %}
+                        <audio style="width=200px;" controls>
+                            <source src="{{ message.content }}">
+                        </audio>
+                    {% elif message.what_is_it == "video" %}
+                       <video width="320" height="240" controls>
+                        <source src="{{ message.content }}">
+                       </video>
                   {% endif %}
                 </div>
                 <span class="message-time pull-right">
@@ -346,7 +354,19 @@
               <div class="col-sm-12 message-main-receiver">
                 <div class="receiver">
                   <div class="message-text">
+                    {% if message.what_is_it == "text" %}
                     {{ message.content }}
+                    {% elif message.what_is_it == "image" %}
+                      <img src="{{ message.content }}" width="300" height="300">
+                    {% elif message.what_is_it == "audio" %}
+                        <audio style="width=200px;" controls>
+                            <source src="{{ message.content }}">
+                        </audio>
+                    {% elif message.what_is_it == "video" %}
+                       <video width="320" height="240" controls>
+                        <source src="{{ message.content }}">
+                       </video>
+                  {% endif %}
                   </div>
                   <span class="message-time pull-right">
                     {{ message.get_short_date }}
@@ -369,7 +389,7 @@
 
       <div class="row reply">
         <div class="col-sm-1 col-xs-1 reply-emojis">
-          <i class="fa fa-smile-o fa-2x"></i>
+          <i class="fa fa-microphone fa-2x" id="record"></i>
         </div>
         <div class="col-sm-9 col-xs-9 reply-main">
           <input class="form-control" rows="1" id="comment"></input>

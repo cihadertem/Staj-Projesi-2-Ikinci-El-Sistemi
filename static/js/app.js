@@ -9,25 +9,109 @@ const inputField=document.getElementById("comment")
 const chatSocket= new WebSocket("ws://"+window.location.host+"/ws/chat/"+roomName+"/")
 
 
+var isRecord=false
 
 document.getElementById("hiddeninput").addEventListener('change',handleFileSelect,false)
 
 function handleFileSelect(){
   var file=document.getElementById('hiddeninput').files[0];
-  getBase64(file)
+  getBase64(file,file.type)
 }
 
-function getBase64(file){
+function getBase64(file,fileType){
+  var type=fileType.split("/")[0]
   var reader= new FileReader()
   reader.readAsDataURL(file)
 
   reader.onload=function(){
     chatSocket.send(JSON.stringify({
-      "what_is_it":"image",
+      "what_is_it":type,
       "message":reader.result
     }))
   }
 }
+
+conversation.scrollTop=conversation.scrollHeight
+
+const startStop=document.getElementById("record")
+
+startStop.onclick=()=>{
+  if(isRecord){
+    stopRecord()
+    startStop.style=""
+    isRecord=false
+  }else{
+    startRecord()
+    startStop.style="color:red"
+    isRecord=true
+  }
+}
+  function startRecord(){
+    navigator.mediaDevices.getUserMedia({audio:true})
+      .then(stream=>{
+        mediaRecorder = new MediaRecorder(stream)
+        mediaRecorder.start()
+        dataArray=[]
+
+        mediaRecorder.ondataavailable=function (e){
+          dataArray.push(e.data)
+        }
+        mediaRecorder.onstop=function (e) {
+          audioData= new Blob(dataArray,{'type':'audio/mp3'})
+          dataArray=[]
+          getBase64(audioData,audioData.type)
+
+          stream.getTracks().forEach(function(track){
+            if(track.readyState=='live'&& track.kind ==='audio'){
+              track.stop()
+            }
+          })
+        }
+      })
+
+  }
+
+  function stopRecord(){
+      mediaRecorder.stop()
+  }
+
+/* navigator.mediaDevices.getUserMedia({audio:true})
+  .then(function (mediaStreamObject) {  
+
+    const startStop=document.getElementById("record")
+
+    const mediaRecorder= new MediaRecorder(mediaStreamObject)
+
+    startStop.addEventListener("click",function(e){
+      if(isRecord){
+          startStop.style=" "
+          isRecord=false
+          mediaRecorder.stop()
+
+      }else{
+          startStop.style="color:red"
+          isRecord=true
+          mediaRecorder.start()
+      }
+    })
+
+    
+    mediaRecorder.ondataavailable=function (e){
+      dataArray.push(e.data)
+    }
+    var dataArray=[]
+
+    mediaRecorder.onstop=function (e) {
+      let audioData=new Blob(dataArray,{'type':'audio/mp3'})
+      dataArray=[]
+      getBase64(audioData,audioData.type)
+    }
+  }) */
+
+
+
+
+
 
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data)
@@ -36,6 +120,14 @@ chatSocket.onmessage = function(e) {
         var message=data.message
     }else if(message_type==="image"){
         var message=`<img width="300" height="300" src="${data.message}">`
+    }else if(message_type==="audio"){
+           var message= `<audio controls>
+                            <source src="${data.message}">
+                        </audio>`
+    }else if(message_type==="video"){
+         var message= `<video width="320" height="240" controls>
+                        <source src="${data.message}">
+                      </video>`
     }
     if (user === data.user){
     var message =`<div class="row message-body">
@@ -65,6 +157,7 @@ chatSocket.onmessage = function(e) {
   </div>`
 }
     conversation.innerHTML+= message
+    conversation.scrollTop=conversation.scrollHeight
 };
 
 chatSocket.onclose=function(e){
