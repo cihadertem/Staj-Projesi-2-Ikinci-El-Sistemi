@@ -13,7 +13,7 @@ def editprofile_view(request):
     return render(request, "users/form.html", {"form": form, 'title': 'Profili Düzenle'})
     def get_object(self):
         return self.request.user
-    
+
 
 def profile_view(request):
     if not request.user.is_authenticated:

@@ -19,15 +19,20 @@
         <a class="nav-link" href="{% url 'users:login' %}">Giriş Yap</a>
       </li>
       {% else %}
-              <li class="nav-item active">
-              <a class="nav-link" href="{% url 'users:profile' %}">Profil</a>
-              </li>
-                <li class="nav-item active">
+            {% if user.avatar %}
+            <li class="nav-item active">
+                <a class="" href="{% url 'users:profile' %}"><img class="rounded-circle text-center" src="{{request.user.avatar.url}}" width="40" height="40"></a>
+            </li>
+            {% endif %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'users:profile' %}">{{request.user.username.capitalize}}</a>
+            </li>
+            <li class="nav-item active">
                 <a class="nav-link" href="{% url 'chats:index' %}">Mesaj</a>
-                </li>
-              <li class="nav-item active">
+            </li>
+            <li class="nav-item active">
               <a class="nav-link" href="{% url 'users:logout' %}">Çıkış Yap</a>
-              </li>
+            </li>
       {% endif %}
 
     </ul>

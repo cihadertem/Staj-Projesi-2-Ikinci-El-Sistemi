@@ -15,6 +15,7 @@
             <li class="list-group-item text-center"><b>Doğum Tarihi:</b> {{user.birthdate}}</li>
             <li class="list-group-item"><b>Biyografi:</b> {{user.bio}}</li>
         </ul>
+        {% if request.user.is_authenticated %}
         {% if request.user == user %}
         <div class="mt-2 mb-1 text-center">
             <a href="{% url 'users:edit' %}" class="btn btn-outline-dark" role="button" aria-pressed="true"><small>Profili Düzenle</small></a>
@@ -24,6 +25,7 @@
         <div class="mt-2 mb-1 text-center">
         <a href="{% url 'chats:start_chat' user %}" class="btn btn-outline-dark" role="button" aria-pressed="true">Mesaj Gönder</a>
         </div>
+        {% endif %}
         {% endif %}
     </div>
 
