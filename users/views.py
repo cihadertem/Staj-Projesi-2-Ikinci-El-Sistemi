@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect, Http404
+from django.shortcuts import render, redirect, Http404, get_object_or_404, HttpResponse
 from .forms import LoginForm, RegisterForm, ProfileUpdateForm
 from django.contrib.auth import authenticate, login, logout
+from .models import CustomUser
 
 def editprofile_view(request):
     form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
@@ -12,11 +13,16 @@ def editprofile_view(request):
     return render(request, "users/form.html", {"form": form, 'title': 'Profili Düzenle'})
     def get_object(self):
         return self.request.user
+    
 
 def profile_view(request):
     if not request.user.is_authenticated:
         raise Http404()
     return render(request, 'users/profile.html')
+
+def user_profile_view(request,username):
+    user=get_object_or_404(CustomUser,username=username)
+    return render(request, 'users/userprofile.html', {'user': user})
 
 def login_view(request):
     form = LoginForm(request.POST or None)
