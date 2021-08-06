@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+    {% include 'header.html' %}
+
+    {% block body %}
+    <div class="col-md-6 offset-3">
+        <ul class="list-group">
+            <h4><li class=" list-group-item list-group-item-dark mb-1 mt-2 text-center" aria-current="true"><b>Profil Bilgileri</b></li></h4>
+            {% if user.avatar %}
+            <div class="mb-2 text-center"><img class="rounded-circle" src="{{user.avatar.url}}" width="220" height="220"></div>
+            {% endif %}
+            <li class="list-group-item text-center"><b>Kullanıcı adı:</b> {{user.username}}</li>
+            <li class="list-group-item text-center"><b>Ad:</b> {{user.first_name}}</li>
+            <li class="list-group-item text-center"><b>Soyad:</b> {{user.last_name}}</li>
+            <li class="list-group-item text-center"><b>Cinsiyeti</b> {{user.gender}}</li>
+            <li class="list-group-item text-center"><b>Doğum Tarihi:</b> {{user.birthdate}}</li>
+            <li class="list-group-item"><b>Biyografi:</b> {{user.bio}}</li>
+        </ul>
+        {% if request.user.is_authenticated %}
+        {% if request.user == user %}
+        <div class="mt-2 mb-1 text-center">
+            <a href="{% url 'users:edit' %}" class="btn btn-outline-dark" role="button" aria-pressed="true"><small>Profili Düzenle</small></a>
+            <a href="{% url 'users:logout' %}" class="btn btn-outline-danger" role="button" aria-pressed="true"><small>Çıkış Yap</small></a>
+        </div>
+        {% else %}
+        <div class="mt-2 mb-1 text-center">
+        <a href="{% url 'chats:start_chat' user %}" class="btn btn-outline-dark" role="button" aria-pressed="true">Mesaj Gönder</a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    {% endblock %}
