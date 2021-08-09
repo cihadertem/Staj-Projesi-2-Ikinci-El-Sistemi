@@ -1,9 +1,29 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<style>body{bgcolor:red}</style>
 <div class="container">
 <div class="row">
-ANA SAYFA
+           {% for post in posts %}
+    <div class="col d-flex align-items-stretch">
+
+        <div class="card text-white bg-dark mb-3" style="width: 24rem;">
+        <img class="card-img-top" src="{{ post.post_image.url }}" alt="Card image cap" width="290" height="280">
+         <div class="card-body">
+             <h3 class="card-title"><b>{{ post.title }}</b></h3>
+             <h5>{{ post.category }}</h5>
+             <small>{{post.adress}}</small>
+
+            <!-- <p class="card-text"><i>{{ post.description }}</i></p> --!>
+             <h2 class="card-title"><b>{{ post.price }} ₺</b></h2>
+        <a href="/post/{{post.id}}" class="btn btn-danger btn-lg align-bottom" style="">Ürün Detayları</a>
+             <br><small>{{post.created_time}}</small><br>
+         </div>
+    </div>
+
+
+    </div>
+            {% endfor %}
 </div>
 </div>
 

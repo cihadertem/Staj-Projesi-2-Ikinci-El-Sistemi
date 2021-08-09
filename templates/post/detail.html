@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<!--<div class="container">
+<div class="row">
+<div class="col-md-6">
+<div class="mb-2"><img class="" src="{{post.post_image.url}}" width="400" height="400"></div>
+</div>
+<div class="col-md-6">
+        <ul class="list-group">
+            <h2 class=""><b>{{post.title.upper}}</b></h2>
+            <h3><b>İlan Tarihi:</b> {{post.created_time}}</h3>
+            <h3><b>Kategori:</b>{{ post.category }}</h3>
+            <h3><b>Adres:</b>{{post.adress}}</h3>
+            <h3><b>Fiyat:</b>{{ post.price }} ₺</h3>
+            <b>İlan Açıklaması:</b>{{post.description}}
+        </ul>
+    </div>
+</div>
+
+</div> --!>
+<div class="col offset-3">
+
+        <div class="card text-white bg-dark mb-3" style="width: 45rem;">
+        <img class="card-img-top" src="{{ post.post_image.url }}" alt="Card image cap" width="290" height="400">
+         <div class="card-body">
+             <h3 class="card-title text-center"><b>{{ post.title }}</b></h3>
+             <h5 class="text-center">{{ post.category }}</h5>
+             <p class="text-center">{{post.adress}}</p>
+            <!-- <p class="card-text"><i>{{ post.description }}</i></p> --!>
+            <p class="text-center">{{post.created_time}}</p>
+             <h2 class="text-center"><b>{{ post.price }} ₺</b></h2>
+             <p><b>Ürün Açıklaması:</b></p>
+             <p><i>{{post.description}}</i></p>
+         </div>
+    </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -308,7 +308,11 @@
           </div>
         </div>
         <div class="col-sm-8 col-xs-7 heading-name">
-          <a href="{% url 'home' %}" class="heading-name-meta">
+            {% if room.first_user == request.user %}
+            <a href="{% url 'users:userprofile' room.second_user %}" class="heading-name-meta">
+            {% else %}
+            <a href="{% url 'users:userprofile' room.first_user %}" class="heading-name-meta">
+            {% endif %}
             {% if room.first_user == request.user %}
               {{ room.second_user }}
                 {% else %}

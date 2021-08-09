@@ -17,11 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from home.views import home_view
+from post.views import post_index
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
+    path('', post_index, name='home'),
     path('post/',include('post.urls')),
     path('users/', include('users.urls')),
     path('chat/', include('chat.urls'))
