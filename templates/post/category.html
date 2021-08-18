@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <ul class="list-group">
+        {% for c in categories %}
+                <li class="list-group-item"><a class="link.danger" href="category/{{c.id}}" >{{c.name}}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

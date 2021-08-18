@@ -1,22 +1,20 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<style>body{bgcolor:red}</style>
 <div class="container">
 <div class="row">
            {% for post in posts %}
     <div class="col d-flex align-items-stretch">
 
-        <div class="card text-white bg-dark mb-3" style="width: 24rem;">
-        <img class="card-img-top" src="{{ post.post_image.url }}" alt="Card image cap" width="290" height="280">
+        <div class="card text-white bg-dark mb-2" style="width: 15rem;height 10rem;">
+        <img class="card-img-top" src="{{ post.post_image.url }}" alt="Card image cap" width="290" height="200">
          <div class="card-body">
              <h3 class="card-title"><b>{{ post.title }}</b></h3>
              <h5>{{ post.category }}</h5>
              <small>{{post.adress}}</small>
 
-            <!-- <p class="card-text"><i>{{ post.description }}</i></p> --!>
              <h2 class="card-title"><b>{{ post.price }} ₺</b></h2>
-        <a href="/post/{{post.id}}" class="btn btn-danger btn-lg align-bottom" style="">Ürün Detayları</a>
+        <a href="{{ post.get_absolute_url }}" class="btn btn-danger btn-lg align-bottom" style="">Ürün Detayları</a>
              <br><small>{{post.created_time}}</small><br>
          </div>
     </div>
@@ -24,6 +22,29 @@
 
     </div>
             {% endfor %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3"
+                <div class="pagination">
+                <span class="step-links">
+                    {% if posts.has_previous %}
+                        <a href="?page=1">&laquo; İlk sayfaya git</a>
+                        <a href="?page={{ posts.previous_page_number }}">Önceki</a>
+                    {% endif %}
+
+                    <span class="current">
+                        {{ posts.number }}/{{ posts.paginator.num_pages }}. Sayfa
+                    </span>
+
+                    {% if posts.has_next %}
+                        <a  href="?page={{ posts.next_page_number }}">Sonraki</a>
+                        <a href="?page={{ posts.paginator.num_pages }}">En son &raquo;</a>
+                    {% endif %}
+                </span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 

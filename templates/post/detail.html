@@ -32,6 +32,15 @@
              <h2 class="text-center"><b>{{ post.price }} ₺</b></h2>
              <p><b>Ürün Açıklaması:</b></p>
              <p><i>{{post.description}}</i></p>
+             <p><b>İlanı Veren:<br> <a href="{% url 'users:userprofile' post.yazar %}"><img class="rounded-circle text-center" src="{{ post.yazar.avatar.url}}" width="40" height="40"></a><a class="link-danger" href="{% url 'users:userprofile' post.yazar %}"> {{post.yazar}}</a> </b></p>
+             {% if request.user.is_authenticated %}
+             {% if request.user == post.yazar %}
+             <a href="{{post.id}}/update" class="btn btn-danger btn-lg align-bottom btn-sm" style="">İlanı Düzenle</a>
+             <a href="{{post.id}}/delete" class="btn btn-danger btn-lg align-bottom btn-sm" style="">İlanı Sil</a>
+             {% else %}
+             <a href="{% url 'chats:start_chat' post.yazar %}" class="btn btn-danger btn-lg align-bottom btn-sm" style="">Mesaj Gönder</a>
+             {% endif %}
+             {% endif %}
          </div>
     </div>
 
